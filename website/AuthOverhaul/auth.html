@@ -1,0 +1,380 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />
+    <title>%translate.login%</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.5;
+            font-size: large;
+            justify-content: center;
+        }
+        
+        form {
+            margin: 20px;
+            padding: 20px;
+            display: none;
+            text-align: center;
+            border-radius: 5px;
+            background-color: white;
+        }
+        
+        input,
+        button {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid grey;
+            border-radius: 5px;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 18px;
+        }
+        
+        input:invalid {
+            border-color: red;
+        }
+        
+        p.message-2,
+        p.message-3 {
+            color: red;
+        }
+    </style>
+    <link rel="stylesheet" href="%style_url%">
+</head>
+
+<body>
+    <section>
+        <form class="connect" action="javascript:void(0);">
+            <h2>%translate.login%</h2>
+            <input type="text" class="name" pattern="^[a-zA-Z0-9_]{3,16}$" required placeholder="%translate.name%" />
+            <input type="password" class="password" pattern=".{6,}" required placeholder="%translate.password%" />
+            <button>%translate.login%</button>
+        </form>
+        <form class="network-error" action="javascript:void(0);">
+            <h2>%translate.network_error.title%</h2>
+            <p>%translate.network_error.text%</p>
+        </form>
+        <form class="mojang-error" action="javascript:void(0);">
+            <h2>%translate.mojang_error.title%</h2>
+            <p>%translate.mojang_error.text%</p>
+        </form>
+        <form class="check-name" action="javascript:void(0);">
+            <h2>%translate.check_name.title%</h2>
+            <p class="message-0">%translate.check_name.0%</p>
+            <div class="message-1">
+                <p>%translate.check_name.1%</p>
+                <a class="link-login-change-name" href="javascript:void(0);">%translate.login%</a><br>
+                <a class="link-register" href="javascript:void(0);">%translate.register%</a>
+            </div>
+            <p class="message-2">%translate.check_name.2%</p>
+            <p class="message-3">%translate.check_name.3%</p>
+            <input type="text" class="name" pattern="^[a-zA-Z0-9_]{3,16}$" required placeholder="%translate.name%" />
+            <button>%translate.check%</button>
+        </form>
+        <form class="login" action="javascript:void(0);">
+            <h2>%translate.login%</h2>
+            <input type="password" class="password" pattern=".{6,}" required placeholder="%translate.password%" />
+            <button>%translate.login%</button>
+        </form>
+        <form class="login-or-register" action="javascript:void(0);">
+            <h2>%translate.login_or_register.title%</h2>
+            <p>%translate.login_or_register.text%</p>
+            <a class="link-login-change-name" href="javascript:void(0);">%translate.login%</a><br>
+            <a class="link-register" href="javascript:void(0);">%translate.register%</a>
+        </form>
+        <form class="login-change-name" action="javascript:void(0);">
+            <h2>%translate.login_change_name%</h2>
+            <input type="text" class="name" pattern="^[a-zA-Z0-9_]{3,16}$" required placeholder="%translate.old_name%" />
+            <input type="password" class="password" pattern=".{6,}" required placeholder="%translate.password%" />
+            <button>%translate.login%</button>
+        </form>
+        <form class="register" action="javascript:void(0);">
+            <h2>%translate.register%</h2>
+            <input type="password" class="password1" pattern=".{6,}" required placeholder="%translate.password%" />
+            <input type="password" class="password2" pattern=".{6,}" required placeholder="%translate.password%" />
+            <button>%translate.register%</button>
+        </form>
+        <form class="panel" action="javascript:void(0);">
+            <h2>%translate.panel.title%</h2>
+            <p>%translate.panel.text%</p>
+            <input type="password" class="password1" pattern=".{6,}" required placeholder="%translate.password%" />
+            <input type="password" class="password2" pattern=".{6,}" required placeholder="%translate.password%" />
+            <button>%translate.change_password%</button>
+        </form>
+    </section>
+    <script>
+        var title = document.querySelector('title').innerHTML;
+
+        function getVariable(param) {
+            var vars = {};
+            window.location.search.replace(/[?&]+([^=&]+)=?([^&]*)?/gi, function(m, key, value) {
+                vars[key] = value !== undefined ? value : '';
+            });
+            if (param) return vars[param] ? vars[param] : null;
+            return vars;
+        }
+
+        var push = true;
+        var playerName;
+        var password;
+
+        var pages = {
+            'connect': document.querySelector('.connect'),
+            'networkError': document.querySelector('.network-error'),
+            'mojangError': document.querySelector('.mojang-error'),
+            'checkName': document.querySelector('.check-name'),
+            'login': document.querySelector('.login'),
+            'loginOrRegister': document.querySelector('.login-or-register'),
+            'loginChangeName': document.querySelector('.login-change-name'),
+            'register': document.querySelector('.register'),
+            'panel': document.querySelector('.panel')
+        };
+
+        function validateConnect() {
+            pages.connect.querySelector('.name').setCustomValidity('');
+            pages.connect.querySelector('.password').setCustomValidity('');
+        }
+        pages.connect.querySelector('.name').addEventListener('input', e => validateConnect());
+        pages.connect.querySelector('.password').addEventListener('input', e => validateConnect());
+        
+        pages.login.querySelector('.password').addEventListener('input', e => pages.login.querySelector('.password').setCustomValidity(''));
+        pages.loginChangeName.querySelector('.password').addEventListener('input', e => pages.loginChangeName.querySelector('.password').setCustomValidity(''));
+
+        function validateLoginChangeName() {
+            pages.loginChangeName.querySelector('.name').setCustomValidity('');
+            pages.loginChangeName.querySelector('.password').setCustomValidity('');
+        }
+        pages.loginChangeName.querySelector('.name').addEventListener('input', e => validateLoginChangeName());
+        pages.loginChangeName.querySelector('.password').addEventListener('input', e => validateLoginChangeName());
+        
+        function validateRegister() {
+            pages.register.querySelector('.password1').setCustomValidity('');
+            pages.register.querySelector('.password2').setCustomValidity('');
+        }
+        pages.register.querySelector('.password1').addEventListener('input', e => validateRegister());
+        pages.register.querySelector('.password2').addEventListener('input', e => validateRegister());
+
+        function validatePanel() {
+            pages.panel.querySelector('.password1').setCustomValidity('');
+            pages.panel.querySelector('.password2').setCustomValidity('');
+        }
+        pages.panel.querySelector('.password1').addEventListener('input', e => validatePanel());
+        pages.panel.querySelector('.password2').addEventListener('input', e => validatePanel());
+
+        function show(element, name) {
+            for (var key in pages) pages[key].style.display = 'none';
+            
+            var elements = document.querySelectorAll('input');
+            for (var i = 0; i < elements.length; i++) elements[i].value = '';
+            
+            element.style.display = 'block';
+            playerName = name;
+            if (push) history.pushState({
+            	"element": Object.keys(pages).find(key => pages[key] === element)
+            }, title, name != null ? "/auth?name=" + name : "/auth");
+        }
+
+        function showCheckName(code, name) {
+            for (var i = 0; i <= 3; i++) {
+                var element = pages.checkName.querySelector('.message-' + i);
+                if (i === code) element.style.display = 'block';
+                else element.style.display = 'none';
+            }
+            if (name) pages.checkName.querySelector('.name').value = name;
+            show(pages.checkName, name);
+        }
+
+        function showPanel(pass, name) {
+            password = pass;
+            show(pages.panel, name);
+        }
+
+        function request(name, post, callback) {
+            var request = new XMLHttpRequest();
+            request.open('POST', '/auth?name=' + name);
+            request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.addEventListener('readystatechange', function() {
+                if (request.readyState === XMLHttpRequest.DONE) callback(request.status);
+            });
+            request.send(post);
+        }
+
+        pages.connect.addEventListener('submit', function() {
+            if (pages.connect.reportValidity()) {
+                var name = pages.connect.querySelector('.name');
+                var password = pages.connect.querySelector('.password');
+                request(name.value, 'action=login&password=' + encodeURIComponent(password.value), function(status) {
+                    if (status === 0) show(pages.networkError, name.value);
+                    else if (status === 200) showPanel(password.value, name.value);
+                    else if (status === 404 || status === 403) {
+                        name.setCustomValidity('%translate.incorrect.name%');
+                        password.setCustomValidity('%translate.incorrect.password%');
+                        pages.connect.reportValidity();
+                    }
+                    else if (status === 503) show(pages.mojangError, name.value);
+                    else alert('An error has occurred.');
+                });
+            }
+        });
+
+        pages.checkName.querySelector('.link-login-change-name').addEventListener('click', function() {
+            show(pages.loginChangeName, pages.checkName.querySelector('.name').value);
+        });
+        pages.checkName.querySelector('.link-register').addEventListener('click', function() {
+        	show(pages.register, pages.checkName.querySelector('.name').value);
+        });
+
+        pages.checkName.addEventListener('submit', function() {
+            if (pages.checkName.reportValidity()) {
+                var name = pages.checkName.querySelector('.name').value;
+                request(name, 'action=check_name', function(status) {
+                    if (status === 0) show(pages.networkError, name);
+                    else if (status === 200) showCheckName(1, name);
+                    else if (status === 401) showCheckName(2, name);
+                    else if (status === 403) showCheckName(3, name);
+                    else if (status === 503) show(pages.mojangError, name);
+                    else alert('An error has occurred.');
+                });
+            }
+        });
+
+        pages.login.addEventListener('submit', function() {
+            if (pages.login.reportValidity()) {
+                var password = pages.login.querySelector('.password');
+                request(playerName, 'action=login&password=' + encodeURIComponent(password.value), function(status) {
+                    if (status === 0) show(pages.networkError, playerName);
+                    else if (status === 200) showPanel(password.value, playerName);
+                    else if (status === 404) {
+                        password.setCustomValidity('%translate.incorrect.password%');
+                        pages.login.reportValidity();
+                    }
+                    else if (status === 403) showCheckName(3, playerName);
+                    else if (status === 503) show(pages.mojangError, playerName);
+                    else alert('An error has occurred.');
+                });
+            }
+        });
+
+        pages.loginOrRegister.querySelector('.link-login-change-name').addEventListener('click', e => show(pages.loginChangeName, playerName));
+        pages.loginOrRegister.querySelector('.link-register').addEventListener('click', e => show(pages.register, playerName));
+
+        pages.loginChangeName.addEventListener('submit', function() {
+            if (pages.loginChangeName.reportValidity()) {
+                var name = pages.loginChangeName.querySelector('.name');
+                var password = pages.loginChangeName.querySelector('.password');
+                request(playerName, 'action=change_name&password=' + encodeURIComponent(password.value) + '&old_name=' + encodeURIComponent(name.value), function(status) {
+                    if (status === 0) show(pages.networkError);
+                    else if (status === 200) showPanel(password, name.value);
+                    else if (status === 404) {
+                        name.setCustomValidity('%translate.incorrect.name%');
+                        password.setCustomValidity('%translate.incorrect.password%');
+                        pages.loginChangeName.reportValidity();
+                    }
+                    else if (status === 401) showCheckName(2, playerName);
+                    else if (status === 403) showCheckName(3, playerName);
+                    else if (status === 503) show(pages.mojangError, playerName);
+                    else alert('An error has occurred.');
+                });
+            }
+        });
+
+        pages.register.addEventListener('submit', function() {
+            if (pages.register.reportValidity()) {
+                var password1 = pages.register.querySelector('.password1').value;
+                var password2 = pages.register.querySelector('.password2');
+                if (password1 == password2.value) {
+                    request(playerName, 'action=register&password=' + encodeURIComponent(password1),
+                        function(status) {
+                            if (status === 0) show(pages.networkError, playerName);
+                            else if (status === 200) showPanel(password1, playerName);
+                            else if (status === 401) showCheckName(2, playerName);
+                            else if (status === 403) showCheckName(3, playerName);
+                            else if (status === 503) show(pages.mojangError, playerName);
+                            else alert('An error has occurred.');
+                        });
+                }
+                else {
+                    password2.setCustomValidity('%translate.passwords_not_the_same%');
+                    pages.register.reportValidity();
+                }
+            }
+        });
+
+        pages.panel.addEventListener('submit', function() {
+            if (pages.panel.reportValidity()) {
+                var password1 = pages.panel.querySelector('.password1').value;
+                var password2 = pages.panel.querySelector('.password2');
+                if (password1 == password2.value) {
+                    request(playerName, 'action=change_password&password=' + encodeURIComponent(password) + '&new_password=' + encodeURIComponent(password1),
+                        function(status) {
+                            if (status === 0) show(pages.networkError, playerName);
+                            else if (status === 200) showPanel(password1, playerName);
+                            else if (status === 404) show(pages.login, playerName);
+                            else if (status === 403) showCheckName(3, playerName);
+                            else if (status === 503) show(pages.mojangError, playerName);
+                            else alert('An error has occurred.');
+                        });
+                }
+                else {
+                    password2.setCustomValidity('%translate.passwords_not_the_same%');
+                    pages.panel.reportValidity();
+                }
+            }
+        });
+
+
+        function load() {
+        	push = false;
+        	
+        	playerName = getVariable('name');
+        	if (history.state != null && history.state.element != null) {
+        		var element = history.state.element;
+        		if (element == 'checkName') {
+        			request(playerName, 'action=check_name', function(status) {
+        				push = false;
+                        if (status === 0) show(pages.networkError, playerName);
+                        else if (status === 200) showCheckName(1, playerName);
+                        else if (status === 401) showCheckName(2, playerName);
+                        else if (status === 403) showCheckName(3, playerName);
+                        else if (status === 503) show(pages.mojangError, playerName);
+                        else alert('An error has occurred.');
+                        push = true;
+                    });
+        		} else show(pages[history.state.element], playerName);
+        	} else if (playerName != null) {
+                request(playerName, 'action=check_name', function(status) {
+                    if (status === 0) show(pages.networkError, playerName);
+                    else if (status === 200) show(pages.loginOrRegister, playerName);
+                    else if (status === 401) show(pages.login, playerName);
+                    else if (status === 403) showCheckName(3, playerName);
+                    else if (status === 499) showCheckName(0, playerName);
+                    else if (status === 503) show(pages.mojangError, playerName);
+                    else alert('An error has occurred.');
+                });
+            }
+            else show(pages.connect, null);
+            
+            push = true;
+        }
+
+        window.addEventListener('popstate', e => load());
+        
+        window.addEventListener('online', e => load());
+        window.addEventListener('offline', e => show(pages.networkError, playerName));
+        
+        load();
+    </script>
+</body>
+
+</html>
