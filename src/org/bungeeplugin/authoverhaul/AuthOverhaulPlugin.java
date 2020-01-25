@@ -89,7 +89,7 @@ public final class AuthOverhaulPlugin extends BungeePlugin {
 					if (crackPlayers == CrackPlayers.ALLOW) {
 						if (!offlinePlayer.isPremium()) {
 							connection.setOnlineMode(false);
-							connection.setUniqueId(offlinePlayer.getUUID());
+							connection.setUniqueId(OfflinePlayer.getOfflineUUID(name));
 						}
 					} else if (crackPlayers == CrackPlayers.REGISTER) {
 						if (!offlinePlayer.isPremium()) {
