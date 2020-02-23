@@ -22,7 +22,7 @@ public class WebLogin extends WebServer {
 	
 	protected final String source;
 	
-	public WebLogin(Plugin plugin) {
+	public WebLogin(Plugin plugin) throws IOException {
 		super(plugin);
 		String s;
 		try {

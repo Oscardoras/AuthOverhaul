@@ -1,5 +1,7 @@
 package org.bungeeplugin.authoverhaul;
 
+import java.io.IOException;
+
 import org.bungeeutils.BungeePlugin;
 import org.bungeeutils.OfflinePlayer;
 import org.bungeeutils.io.DataFile;
@@ -73,7 +75,11 @@ public final class AuthOverhaulPlugin extends BungeePlugin {
 			
 			if (!config.contains("http.style_url")) config.set("http.style_url", "/style.css");
 			styleUrl = config.getString("http.style_url");
-			webLogin = new WebLogin(this);
+			try {
+				webLogin = new WebLogin(this);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			address = webLogin.getAddress();
 		}
 	}
