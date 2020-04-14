@@ -319,7 +319,10 @@
                     request(playerName, 'action=change_password&password=' + encodeURIComponent(password) + '&new_password=' + encodeURIComponent(password1),
                         function(status) {
                             if (status === 0) show(pages.networkError, playerName);
-                            else if (status === 200) showPanel(password1, playerName);
+                            else if (status === 200) {
+                            	showPanel(password1, playerName);
+                            	alert("Ok");
+                            }
                             else if (status === 404) show(pages.login, playerName);
                             else if (status === 403) showCheckName(3, playerName);
                             else if (status === 503) show(pages.mojangError, playerName);
