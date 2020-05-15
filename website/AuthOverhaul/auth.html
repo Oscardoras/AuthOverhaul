@@ -111,6 +111,7 @@
             <input type="password" class="password1" pattern=".{6,}" required placeholder="%translate.password%" />
             <input type="password" class="password2" pattern=".{6,}" required placeholder="%translate.password%" />
             <button>%translate.change_password%</button>
+            <p class="password-changed">%translate.panel.password_changed%</p>
         </form>
     </section>
     <script>
@@ -195,8 +196,9 @@
             show(pages.checkName, name);
         }
 
-        function showPanel(pass, name) {
+        function showPanel(pass, name, showPasswordChanged) {
             password = pass;
+            pages.panel.querySelector('.password-changed').style.display = showPasswordChanged ? 'block' : 'none';
             show(pages.panel, name);
         }
 
@@ -216,7 +218,7 @@
                 var password = pages.connect.querySelector('.password');
                 request(name.value, 'action=login&password=' + encodeURIComponent(password.value), function(status) {
                     if (status === 0) show(pages.networkError, name.value);
-                    else if (status === 200) showPanel(password.value, name.value);
+                    else if (status === 200) showPanel(password.value, name.value, false);
                     else if (status === 404 || status === 403) {
                         name.setCustomValidity('%translate.incorrect.name%');
                         password.setCustomValidity('%translate.incorrect.password%');
@@ -254,7 +256,7 @@
                 var password = pages.login.querySelector('.password');
                 request(playerName, 'action=login&password=' + encodeURIComponent(password.value), function(status) {
                     if (status === 0) show(pages.networkError, playerName);
-                    else if (status === 200) showPanel(password.value, playerName);
+                    else if (status === 200) showPanel(password.value, playerName, false);
                     else if (status === 404) {
                         password.setCustomValidity('%translate.incorrect.password%');
                         pages.login.reportValidity();
@@ -275,7 +277,7 @@
                 var password = pages.loginChangeName.querySelector('.password');
                 request(playerName, 'action=change_name&password=' + encodeURIComponent(password.value) + '&old_name=' + encodeURIComponent(name.value), function(status) {
                     if (status === 0) show(pages.networkError);
-                    else if (status === 200) showPanel(password, name.value);
+                    else if (status === 200) showPanel(password, name.value, false);
                     else if (status === 404) {
                         name.setCustomValidity('%translate.incorrect.name%');
                         password.setCustomValidity('%translate.incorrect.password%');
@@ -297,7 +299,7 @@
                     request(playerName, 'action=register&password=' + encodeURIComponent(password1),
                         function(status) {
                             if (status === 0) show(pages.networkError, playerName);
-                            else if (status === 200) showPanel(password1, playerName);
+                            else if (status === 200) showPanel(password1, playerName, false);
                             else if (status === 401) showCheckName(2, playerName);
                             else if (status === 403) showCheckName(3, playerName);
                             else if (status === 503) show(pages.mojangError, playerName);
@@ -319,10 +321,7 @@
                     request(playerName, 'action=change_password&password=' + encodeURIComponent(password) + '&new_password=' + encodeURIComponent(password1),
                         function(status) {
                             if (status === 0) show(pages.networkError, playerName);
-                            else if (status === 200) {
-                            	showPanel(password1, playerName);
-                            	alert("Ok");
-                            }
+                            else if (status === 200) showPanel(password1, playerName, true);
                             else if (status === 404) show(pages.login, playerName);
                             else if (status === 403) showCheckName(3, playerName);
                             else if (status === 503) show(pages.mojangError, playerName);
