@@ -1,4 +1,4 @@
-package org.bungeeplugin.authoverhaul;
+package me.oscardoras.authoverhaul;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.bungeeutils.OfflinePlayer;
-import org.bungeeutils.io.DataFile;
-
+import me.oscardoras.bungeeutils.OfflinePlayer;
+import me.oscardoras.bungeeutils.io.DataFile;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
 

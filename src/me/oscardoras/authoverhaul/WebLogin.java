@@ -1,4 +1,4 @@
-package org.bungeeplugin.authoverhaul;
+package me.oscardoras.authoverhaul;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,22 +8,19 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bungeeutils.OfflinePlayer;
-import org.bungeeutils.io.TranslatableMessage;
-import org.webutils.WebRequest;
-import org.webutils.WebServer;
-
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
-import net.md_5.bungee.api.plugin.Plugin;
+import me.oscardoras.bungeeutils.OfflinePlayer;
+import me.oscardoras.bungeeutils.io.TranslatableMessage;
+import me.oscardoras.webutils.WebRequest;
+import me.oscardoras.webutils.WebServer.Responder;
 
-public class WebLogin extends WebServer {
+public class WebLogin implements Responder {
 	
 	protected final String source;
 	
-	public WebLogin(Plugin plugin) throws IOException {
-		super(plugin);
+	public WebLogin() throws IOException {
 		String s;
 		try {
 			s = Resources.toString(getClass().getClassLoader().getResource("website/AuthOverhaul/auth.html"), Charsets.UTF_8);
@@ -53,7 +50,7 @@ public class WebLogin extends WebServer {
 	}
 
 	@Override
-	public void onRequest(WebRequest request) throws IOException {
+	public void respond(WebRequest request) throws IOException {
 		String path = request.getPath();
 		String method = request.getRequestMethod();
 		
@@ -66,7 +63,7 @@ public class WebLogin extends WebServer {
 					if (method.equals("GET")) request.getResponseBody().write(Files.readAllBytes(Paths.get(file.getPath())));
 				} else request.sendResponseHeaders(404);
 			} else request.sendResponseHeaders(405);
-		} else if (path.equals("/auth")) {
+		} else if (path.equals("/")) {
 			if (method.equals("GET")) {
 				request.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
 				request.sendResponseHeaders(200);

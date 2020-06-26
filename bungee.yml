@@ -1,4 +1,4 @@
 name: AuthOverhaul
 version: 1.0.0
 author: oscardoras
-main: org.bungeeplugin.authoverhaul.AuthOverhaulPlugin
+main: me.oscardoras.authoverhaul.AuthOverhaulPlugin

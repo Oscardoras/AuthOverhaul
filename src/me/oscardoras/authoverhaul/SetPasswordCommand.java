@@ -1,11 +1,10 @@
-package org.bungeeplugin.authoverhaul;
+package me.oscardoras.authoverhaul;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bungeeutils.BungeeCommand;
-import org.bungeeutils.io.SendMessage;
-
+import me.oscardoras.bungeeutils.BungeeCommand;
+import me.oscardoras.bungeeutils.io.SendMessage;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 

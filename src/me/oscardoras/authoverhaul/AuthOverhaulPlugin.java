@@ -1,11 +1,12 @@
-package org.bungeeplugin.authoverhaul;
+package me.oscardoras.authoverhaul;
 
 import java.io.IOException;
 
-import org.bungeeutils.BungeePlugin;
-import org.bungeeutils.OfflinePlayer;
-import org.bungeeutils.io.DataFile;
-
+import me.oscardoras.bungeeutils.BungeePlugin;
+import me.oscardoras.bungeeutils.OfflinePlayer;
+import me.oscardoras.bungeeutils.io.DataFile;
+import me.oscardoras.webutils.BungeeWebServer;
+import me.oscardoras.webutils.WebServer;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -29,7 +30,7 @@ public final class AuthOverhaulPlugin extends BungeePlugin {
 	public CrackPlayers crackPlayers;
 	public String styleUrl = null;
 	protected String address = null;
-	protected WebLogin webLogin = null;
+	protected WebServer webServer = null;
 	
 	@Override
 	public void onEnable() {
@@ -40,7 +41,7 @@ public final class AuthOverhaulPlugin extends BungeePlugin {
 	
 	@Override
 	public void onDisable() {
-		if (webLogin != null) webLogin.stop();
+		if (webServer != null) webServer.stop();
 		ProxyServer.getInstance().getPluginManager().unregisterCommand(SetPasswordCommand.command);
 	}
 	
@@ -76,11 +77,12 @@ public final class AuthOverhaulPlugin extends BungeePlugin {
 			if (!config.contains("http.style_url")) config.set("http.style_url", "/style.css");
 			styleUrl = config.getString("http.style_url");
 			try {
-				webLogin = new WebLogin(this);
+				if (!config.contains("http.address")) config.set("http.address", "http://localhost:8123/");
+				webServer = BungeeWebServer.newBungeeWebServer(this, new WebLogin());
+				address = config.getString("http.address");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			address = webLogin.getAddress();
 		}
 	}
 	

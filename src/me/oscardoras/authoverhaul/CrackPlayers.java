@@ -1,4 +1,4 @@
-package org.bungeeplugin.authoverhaul;
+package me.oscardoras.authoverhaul;
 
 public enum CrackPlayers {
 	
