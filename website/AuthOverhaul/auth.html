@@ -183,7 +183,7 @@
             playerName = name;
             if (push) history.pushState({
             	"element": Object.keys(pages).find(key => pages[key] === element)
-            }, title, name != null ? "/auth?name=" + name : "/auth");
+            }, title, name != null ? "/?name=" + name : "/");
         }
 
         function showCheckName(code, name) {
@@ -204,7 +204,7 @@
 
         function request(name, post, callback) {
             var request = new XMLHttpRequest();
-            request.open('POST', '/auth?name=' + name);
+            request.open('POST', '/?name=' + name);
             request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             request.addEventListener('readystatechange', function() {
                 if (request.readyState === XMLHttpRequest.DONE) callback(request.status);

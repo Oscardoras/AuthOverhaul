@@ -108,11 +108,11 @@ public final class AuthOverhaulPlugin extends BungeePlugin {
 									connection.setUniqueId(player.getUUID());
 								} else {
 									e.setCancelled(true);
-									e.setCancelReason(new TextComponent("You are login on this server from a new IP address, please login: " + address + "/auth?name=" + name));
+									e.setCancelReason(new TextComponent("You are login on this server from a new IP address, please login: " + address + "/?name=" + name));
 								}
 							} else {
 								e.setCancelled(true);
-								e.setCancelReason(new TextComponent("Your name is unknow from this server, please login or register: " + address + "/auth?name=" + name));
+								e.setCancelReason(new TextComponent("Your name is unknow from this server, please login or register: " + address + "/?name=" + name));
 							}
 						}
 					}
